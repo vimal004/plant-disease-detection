@@ -95,29 +95,28 @@ export default function DiagnosisPage() {
       };
 
       setSelectedDiagnosis(updatedDiagnosis);
-      console.log(updatedDiagnosis);  
-      console.log(selectedDiagnosis.disease);
 
-      // Actual API call to your backend
+      // Format the prompt for the Gemini API
+      const prompt = `Disease: ${selectedDiagnosis.disease}, Query: ${question}`;
+
+      // Actual API call to your backend (Gemini)
       const response = await fetch(
-        "https://gemini-backend-uiuz.onrender.com/gemini",
+        "https://gemini-backend-uiuz.onrender.com/gemini", // Make sure this URL is correct
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            prompt: `Disease: ${selectedDiagnosis.disease} Query: ${question}`,
-          }),
+          body: JSON.stringify({ prompt }), // Send the prompt as JSON
         }
       );
+      console.log("Response from API:", response);  
 
       if (!response.ok) {
         throw new Error("API call failed");
       }
 
-      console.log(response);
-
       const data = await response.json();
-      const assistantReply = data.answer || "Sorry, no response received.";
+      console.log("Response data parsed:", data); // Log the response data
+      const assistantReply = data.response || "Sorry, no response received.";
 
       // Add assistant response to chat
       const finalDiagnosis = {
@@ -149,6 +148,7 @@ export default function DiagnosisPage() {
       setIsLoading(false);
     }
   };
+
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
