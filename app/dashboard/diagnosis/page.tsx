@@ -97,7 +97,7 @@ export default function DiagnosisPage() {
       setSelectedDiagnosis(updatedDiagnosis);
 
       // Format the prompt for the Gemini API
-      const prompt = `Disease: ${selectedDiagnosis.disease}, Query: ${question}`;
+      const prompt = `Disease: ${selectedDiagnosis.disease}, Query: ${question} proper formatted response no asterisks and give bullet pts`;
 
       // Actual API call to your backend (Gemini)
       const response = await fetch(
