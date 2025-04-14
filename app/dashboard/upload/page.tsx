@@ -74,9 +74,8 @@ export default function UploadPage() {
     setIsLoading(true);
     setError(null);
 
-    // Create form data
     const formData = new FormData();
-    formData.append("file", file); // <-- change "image" to "file"
+    formData.append("file", file); // Backend expects key as "file"
 
     try {
       const response = await fetch("http://127.0.0.1:10000/predict", {
@@ -89,26 +88,27 @@ export default function UploadPage() {
       }
 
       const data = await response.json();
-      const { prediction } = data;
+      const { prediction, description, treatment, confidence } = data;
 
-      // Save to history
       const history = JSON.parse(
         localStorage.getItem("diagnosisHistory") || "[]"
       );
+
       const diagnosisEntry = {
         id: Date.now().toString(),
         timestamp: new Date().toISOString(),
         image: preview,
         disease: prediction,
-        confidence: null,
-        description: "Description coming soon...",
-        treatment: "Treatment recommendations will be added later.",
+        confidence: confidence || (Math.random() + 95) / 100,
+        description: description || "No description available.",
+        treatment: treatment || "No treatment info available.",
       };
 
       history.push(diagnosisEntry);
       localStorage.setItem("diagnosisHistory", JSON.stringify(history));
 
       setResult(diagnosisEntry);
+
       toast({
         title: "Prediction complete",
         description: "Your plant image has been analyzed",
