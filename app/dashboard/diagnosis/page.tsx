@@ -95,18 +95,17 @@ export default function DiagnosisPage() {
       };
 
       setSelectedDiagnosis(updatedDiagnosis);
+      console.log(updatedDiagnosis);  
+      console.log(selectedDiagnosis.disease);
 
       // Actual API call to your backend
       const response = await fetch(
         "https://gemini-backend-uiuz.onrender.com/gemini",
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            disease: selectedDiagnosis.disease || "peach leaf curl",
-            question: question,
+            prompt: `Disease: ${selectedDiagnosis.disease} Query: ${question}`,
           }),
         }
       );
